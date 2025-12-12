@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IsabelliDoces.Migrations
 {
     [DbContext(typeof(IsabelliDocesContext))]
-    [Migration("20251212013006_InitialCreate")]
+    [Migration("20251212043635_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,9 +24,6 @@ namespace IsabelliDoces.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AddressType")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Cep")
@@ -53,7 +50,6 @@ namespace IsabelliDoces.Migrations
                         new
                         {
                             Id = 1,
-                            AddressType = 0,
                             Cep = "12345-678",
                             Complement = "Kitnet",
                             Number = "4226",
@@ -62,11 +58,42 @@ namespace IsabelliDoces.Migrations
                         new
                         {
                             Id = 2,
-                            AddressType = 0,
                             Cep = "54321-876",
                             Complement = "",
                             Number = "9995",
                             Street = "Rua Floresta Grossa"
+                        });
+                });
+
+            modelBuilder.Entity("IsabelliDoces.Entities.CakeFlavor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CakeFlavors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Chocolate",
+                            Price = 30.00m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Morango",
+                            Price = 35.00m
                         });
                 });
 
@@ -76,7 +103,7 @@ namespace IsabelliDoces.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AddressId")
+                    b.Property<int?>("HomeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -89,7 +116,7 @@ namespace IsabelliDoces.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("HomeId");
 
                     b.ToTable("Clients");
 
@@ -97,14 +124,14 @@ namespace IsabelliDoces.Migrations
                         new
                         {
                             Id = 1,
-                            AddressId = 1,
+                            HomeId = 1,
                             Name = "Gustavo",
                             Phone = "(44) 91234-5678"
                         },
                         new
                         {
                             Id = 2,
-                            AddressId = 2,
+                            HomeId = 2,
                             Name = "Lana",
                             Phone = "(44) 95555-4444"
                         });
@@ -116,9 +143,6 @@ namespace IsabelliDoces.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AddressId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Cpf")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -126,6 +150,9 @@ namespace IsabelliDoces.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("HomeId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -141,7 +168,7 @@ namespace IsabelliDoces.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("HomeId");
 
                     b.ToTable("Employees");
 
@@ -149,9 +176,9 @@ namespace IsabelliDoces.Migrations
                         new
                         {
                             Id = 1,
-                            AddressId = 2,
                             Cpf = "025.156.745-89",
                             Email = "edu@gmail.com",
+                            HomeId = 2,
                             Name = "Eduardo",
                             Password = "123",
                             Phone = "(44) 91234-5678"
@@ -167,28 +194,49 @@ namespace IsabelliDoces.Migrations
                     b.Property<DateTime>("AccomplishDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("AddressId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ClientId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DeliveryPlaceId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("LocalId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AddressId");
+
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("DeliveryPlaceId");
-
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("IsabelliDoces.Entities.OrderLine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CakeFlavorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CakeFlavorId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderLines");
                 });
 
             modelBuilder.Entity("IsabelliDoces.Entities.Role", b =>
@@ -249,6 +297,38 @@ namespace IsabelliDoces.Migrations
                         });
                 });
 
+            modelBuilder.Entity("IsabelliDoces.Relations.DeliveryPlace", b =>
+                {
+                    b.Property<int>("ClientId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AddressId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ClientId", "AddressId");
+
+                    b.HasIndex("AddressId");
+
+                    b.ToTable("DeliveryPlaces");
+
+                    b.HasData(
+                        new
+                        {
+                            ClientId = 1,
+                            AddressId = 1
+                        },
+                        new
+                        {
+                            ClientId = 1,
+                            AddressId = 2
+                        },
+                        new
+                        {
+                            ClientId = 2,
+                            AddressId = 1
+                        });
+                });
+
             modelBuilder.Entity("IsabelliDoces.Relations.RolePermission", b =>
                 {
                     b.Property<int>("RoleId")
@@ -276,39 +356,54 @@ namespace IsabelliDoces.Migrations
 
             modelBuilder.Entity("IsabelliDoces.Entities.Client", b =>
                 {
-                    b.HasOne("IsabelliDoces.Entities.Address", "Address")
+                    b.HasOne("IsabelliDoces.Entities.Address", "Home")
                         .WithMany()
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("HomeId");
 
-                    b.Navigation("Address");
+                    b.Navigation("Home");
                 });
 
             modelBuilder.Entity("IsabelliDoces.Entities.Employee", b =>
                 {
-                    b.HasOne("IsabelliDoces.Entities.Address", "Address")
+                    b.HasOne("IsabelliDoces.Entities.Address", "Home")
                         .WithMany()
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("HomeId");
 
-                    b.Navigation("Address");
+                    b.Navigation("Home");
                 });
 
             modelBuilder.Entity("IsabelliDoces.Entities.Order", b =>
                 {
+                    b.HasOne("IsabelliDoces.Entities.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("IsabelliDoces.Entities.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IsabelliDoces.Entities.Address", "DeliveryPlace")
-                        .WithMany()
-                        .HasForeignKey("DeliveryPlaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Address");
 
                     b.Navigation("Client");
+                });
 
-                    b.Navigation("DeliveryPlace");
+            modelBuilder.Entity("IsabelliDoces.Entities.OrderLine", b =>
+                {
+                    b.HasOne("IsabelliDoces.Entities.CakeFlavor", "CakeFlavor")
+                        .WithMany()
+                        .HasForeignKey("CakeFlavorId");
+
+                    b.HasOne("IsabelliDoces.Entities.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId");
+
+                    b.Navigation("CakeFlavor");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("IsabelliDoces.Entities.RoleContract", b =>
@@ -330,10 +425,29 @@ namespace IsabelliDoces.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("IsabelliDoces.Relations.DeliveryPlace", b =>
+                {
+                    b.HasOne("IsabelliDoces.Entities.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IsabelliDoces.Entities.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Client");
+                });
+
             modelBuilder.Entity("IsabelliDoces.Relations.RolePermission", b =>
                 {
                     b.HasOne("IsabelliDoces.Entities.Role", "Role")
-                        .WithMany("RolePermissions")
+                        .WithMany("Permissions")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -343,7 +457,7 @@ namespace IsabelliDoces.Migrations
 
             modelBuilder.Entity("IsabelliDoces.Entities.Role", b =>
                 {
-                    b.Navigation("RolePermissions");
+                    b.Navigation("Permissions");
                 });
 #pragma warning restore 612, 618
         }

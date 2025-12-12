@@ -14,7 +14,7 @@ public class LoginMenu() : Menu
         {
             throw new InvalidOperationException("User not logged in. Please attempt login first.");
         }
-        return User!;
+        return User;
     }
 
     public override async Task Display(IsabelliDocesContext dbContext)
@@ -52,9 +52,7 @@ public class LoginMenu() : Menu
                 continue;
             }
             User = funcionario;
-            break;
+            await MenuManager.MainMenu.Display(dbContext);
         }
-
-        await MenuManager.MainMenu.Display(dbContext);
     }
 }

@@ -1,14 +1,13 @@
 using IsabelliDoces.Data;
 using IsabelliDoces.Enums;
-using IsabelliDoces.Relations;
 using Microsoft.EntityFrameworkCore;
 
 namespace IsabelliDoces.UI;
 
-public class MenuOption(string label, Action<IsabelliDocesContext> action, params PermissionType[] permissions)
+public class MenuOption(string label, Func<IsabelliDocesContext, Task> action, params PermissionType[] permissions)
 {
     public string Label { get; } = label;
-    public Action<IsabelliDocesContext> Action { get; } = action;
+    public Func<IsabelliDocesContext, Task> Action { get; } = action;
     public PermissionType[] RequiredPermissions { get; } = permissions;
 
     public bool HavePermission(IsabelliDocesContext dbContext)
@@ -21,14 +20,14 @@ public class MenuOption(string label, Action<IsabelliDocesContext> action, param
 
         var activesContracts = dbContext.RoleContracts
             .Include(rc => rc.Employee).Include(rc => rc.Role)
-            .ThenInclude(r => r.RolePermissions).ToList()
+            .ThenInclude(r => r.Permissions).ToList()
             .Where(rc => rc.Employee.Id == user.Id && rc.IsActive());
 
         List<PermissionType> userPermissions = [];
         foreach (var contract in activesContracts)
         {
-            if (contract.Role.RolePermissions is null) continue;
-            foreach (var permission in contract.Role.RolePermissions)
+            if (contract.Role.Permissions is null) continue;
+            foreach (var permission in contract.Role.Permissions)
             {
                 userPermissions.Add(permission.PermissionType);
             }

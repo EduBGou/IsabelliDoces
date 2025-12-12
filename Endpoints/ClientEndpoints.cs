@@ -18,7 +18,7 @@ public static class GamesEndpoints
         // GET /clients/
         group.MapGet("/", async (IsabelliDocesContext dbContext) =>
             await dbContext.Clients
-                .Include(c => c.Address)
+                .Include(c => c.Home)
                 .Select(c => c.Map<Client, ClientSummaryDto>(0))
                 .AsNoTracking()
                 .ToListAsync()

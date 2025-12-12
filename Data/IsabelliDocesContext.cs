@@ -1,7 +1,9 @@
-﻿using IsabelliDoces.Entities;
+﻿using System.Globalization;
+using IsabelliDoces.Entities;
 using IsabelliDoces.Enums;
 using IsabelliDoces.Relations;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 
 namespace IsabelliDoces.Data;
 
@@ -13,8 +15,11 @@ public class IsabelliDocesContext(DbContextOptions<IsabelliDocesContext> options
     public DbSet<Client> Clients => Set<Client>();
     public DbSet<Address> Addresses => Set<Address>();
     public DbSet<Employee> Employees => Set<Employee>();
-    // public DbSet<Permission> Permissions => Set<Permission>();
+    public DbSet<OrderLine> OrderLines => Set<OrderLine>();
+    public DbSet<CakeFlavor> CakeFlavors => Set<CakeFlavor>();
+    // public DbSet<AddressUsage> AddressUsages => Set<AddressUsage>();
     public DbSet<RoleContract> RoleContracts => Set<RoleContract>();
+    public DbSet<DeliveryPlace> DeliveryPlaces => Set<DeliveryPlace>();
     public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,20 +27,42 @@ public class IsabelliDocesContext(DbContextOptions<IsabelliDocesContext> options
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Address>().HasData(
-            new { Id = 1, AddressType = AddressType.RESIDENTIAL, Street = "Rua Mato Fino", Number = "4226", Cep = "12345-678", Complement = "Kitnet" },
-            new { Id = 2, AddressType = AddressType.RESIDENTIAL, Street = "Rua Floresta Grossa", Number = "9995", Cep = "54321-876", Complement = "" }
+            new
+            {
+                Id = 1,
+                Street = "Rua Mato Fino",
+                Number = "4226",
+                Cep = "12345-678",
+                Complement = "Kitnet"
+            },
+            new
+            {
+                Id = 2,
+                Street = "Rua Floresta Grossa",
+                Number = "9995",
+                Cep = "54321-876",
+                Complement = ""
+            }
         );
 
 
         modelBuilder.Entity<Client>().HasData(
-            new { Id = 1, Name = "Gustavo", Phone = "(44) 91234-5678", AddressId = 1 },
-            new { Id = 2, Name = "Lana", Phone = "(44) 95555-4444", AddressId = 2 }
+            new { Id = 1, Name = "Gustavo", Phone = "(44) 91234-5678", HomeId = 1 },
+            new { Id = 2, Name = "Lana", Phone = "(44) 95555-4444", HomeId = 2 }
         );
 
 
-        // modelBuilder.Entity<Employee>()
-        //     .HasOne(e => e.Address)
-        //     .WithMany().HasForeignKey($"{nameof(Address)}Id");
+        modelBuilder.Entity<DeliveryPlace>(e =>
+        {
+            e.HasKey("ClientId", "AddressId");
+        });
+
+        modelBuilder.Entity<DeliveryPlace>().HasData(
+            new { ClientId = 1, AddressId = 1 },
+            new { ClientId = 1, AddressId = 2 },
+            new { ClientId = 2, AddressId = 1 }
+        );
+
 
         modelBuilder.Entity<Employee>().HasData(
             new
@@ -46,39 +73,34 @@ public class IsabelliDocesContext(DbContextOptions<IsabelliDocesContext> options
                 Phone = "(44) 91234-5678",
                 Email = "edu@gmail.com",
                 Password = "123",
-                AddressId = 2
+                HomeId = 2
             }
         );
+
 
         const string ROLE_FK_NAME = "RoleId";
         modelBuilder.Entity<RolePermission>(e =>
         {
-            e.Property<int>(ROLE_FK_NAME);
+            // e.Property<int>(ROLE_FK_NAME);
             e.HasKey(ROLE_FK_NAME, nameof(RolePermission.PermissionType));
-            e.HasOne(rp => rp.Role)
-                .WithMany(r => r.RolePermissions)
-                .HasForeignKey(ROLE_FK_NAME);
-        }
+            // e.HasOne(rp => rp.Role)
+            // .WithMany(r => r.Permissions);
+            // .HasForeignKey(ROLE_FK_NAME);
+        });
+
+
+        modelBuilder.Entity<CakeFlavor>().HasData(
+            new { Id = 1, Name = "Chocolate", Price = 30.00M },
+            new { Id = 2, Name = "Morango", Price = 35.00M }
         );
 
 
         modelBuilder.Entity<RolePermission>().HasData(
             new { RoleId = 1, PermissionType = PermissionType.CRUD_CLIENT },
-            new { RoleId = 1, PermissionType = PermissionType.CRUD_EMPLOYEE }
+            new { RoleId = 1, PermissionType = PermissionType.CRUD_EMPLOYEE },
+            new { RoleId = 1, PermissionType = PermissionType.CREATE_ORDER }
         );
 
-        // modelBuilder.Entity<Permission>().HasData(
-        //    new { Id = 1, Name = "CRUD_CLIENT" },
-        //    new { Id = 2, Name = "CRUD_EMPLOYEE" }
-        //  );
-
-        // modelBuilder.Entity<Role>()
-        //     .HasMany(r => r.Permissions)
-        //     .WithMany(p => p.Roles)
-        //     .UsingEntity(j => j.HasData(
-        //         new { RolesId = 1, PermissionsId = 1 },
-        //         new { RolesId = 1, PermissionsId = 2 }
-        // ));
 
         modelBuilder.Entity<Role>().HasData(
             new
@@ -87,6 +109,7 @@ public class IsabelliDocesContext(DbContextOptions<IsabelliDocesContext> options
                 Name = "Admin"
             }
         );
+
 
         modelBuilder.Entity<RoleContract>().HasData(
             new

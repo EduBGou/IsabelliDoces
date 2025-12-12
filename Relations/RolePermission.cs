@@ -5,6 +5,6 @@ namespace IsabelliDoces.Relations;
 
 public class RolePermission
 {
-    public required Role Role { get; init; }
-    public required PermissionType PermissionType { get; init; }
+    public Role Role { get; set; } = null!;
+    public PermissionType PermissionType { get; set; }
 }

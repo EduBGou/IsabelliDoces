@@ -1,11 +1,12 @@
 using IsabelliDoces.Data;
 using IsabelliDoces.Utilities;
+using Microsoft.EntityFrameworkCore;
 
-namespace IsabelliDoces.UI;
+namespace IsabelliDoces.UI.Helpers;
 
-public class MenuExtention()
+public static class MenuExtention
 {
-    //     const int LINE_LENGTH = 60;
+        // const int LINE_LENGTH = 60;
 
     public static void PrintList<T>(List<T> entities)
     {
@@ -36,6 +37,10 @@ public class MenuExtention()
                     {
                         valueStr = date.ToString("dd/MM/yyyy");
                     }
+                    else if (value is decimal price)
+                    {
+                        valueStr = $"R$ {price:C}";
+                    }
                     else
                     {
                         valueStr = value.ToString()!;
@@ -51,43 +56,80 @@ public class MenuExtention()
         }
     }
 
-    public static void Listing<T>(IsabelliDocesContext dbContext) where T : class
+    public static async Task Listing<T>(IsabelliDocesContext dbContext) where T : class
     {
         Console.Clear();
         Console.WriteLine($"Estes são todos os registros de <{typeof(T).Name}>:");
         var dbSet = dbContext.Set<T>();
-        var list = dbSet.ToList();
+        var list = await dbSet.ToListAsync();
         PrintList(list);
     }
 
-    //     public static T SelectionById<T, TDTO>() where T : class, IModel, new()
+    // public static T SelectionByName<T>() where T : class, new()
+    // {
+    //     Console.WriteLine("Informe o nome do registro para a buscar os resgistros: ");
+    //     T gotModel;
+    //     while (true)
     //     {
-    //         Console.WriteLine("Informe o id do registro que deseja ver os detalhes:");
-    //         T gotModel;
-    //         while (true)
+    //         try
     //         {
-    //             try
-    //             {
-    //                 Console.Write("-> ");
-    //                 int id = Convert.ToInt32(Console.ReadLine());
-    //                 var dao = DAOManager.GetDaoByEntityType<T, TDTO>();
-    //                 var tempGotModel = dao.Get(id);
+    //             Console.Write("-> ");
+    //             int id = Convert.ToInt32(Console.ReadLine());
+    //             var dao = DAOManager.GetDaoByEntityType<T, TDTO>();
+    //             var tempGotModel = dao.Get(id);
 
-    //                 if (tempGotModel is null)
-    //                 {
-    //                     Console.WriteLine("Não há nenhum registro com este id. Tente novamente.");
-    //                     continue;
-    //                 }
-    //                 gotModel = tempGotModel;
-    //                 break;
-    //             }
-    //             catch
+    //             if (tempGotModel is null)
     //             {
-    //                 Console.WriteLine("Informe um valor válido.");
+    //                 Console.WriteLine("Não há nenhum registro com este id. Tente novamente.");
+    //                 continue;
     //             }
+    //             gotModel = tempGotModel;
+    //             break;
     //         }
-    //         return gotModel;
+    //         catch
+    //         {
+    //             Console.WriteLine("Informe um valor válido.");
+    //         }
     //     }
+    //     return gotModel;
+    // }
+
+    // public static async Task<T?> SelectionById<T>(IsabelliDocesContext dbContext) where T : class, new()
+    // {
+    //     Console.WriteLine("Informe o ID do registro (ou pressione ENTER para voltar):");
+    //     T entityFound;
+    //     while (true)
+    //     {
+    //         try
+    //         {
+    //             Console.Write("-> ");
+    //             var ipt = Console.ReadLine();
+                
+    //             if (string.IsNullOrEmpty(ipt)) return null;
+
+    //             if (!int.TryParse(ipt, out int id))
+    //             {
+    //                 Console.WriteLine("Informe um valor válido. Tente novamente.");
+    //                 continue;
+    //             }
+
+    //             var tempEntity = await dbContext.Set<T>().FindAsync(id);
+
+    //             if (tempEntity is null)
+    //             {
+    //                 Console.WriteLine("Não há nenhum registro com este Id. Tente novamente.");
+    //                 continue;
+    //             }
+    //             entityFound = tempEntity;
+    //             break;
+    //         }
+    //         catch
+    //         {
+    //             Console.WriteLine("Informe um valor válido.");
+    //         }
+    //     }
+    //     return entityFound;
+    // }
 
     //     public static void ModelDetails<T, TDTO>(T model) where T : class, IModel, new()
     //     {

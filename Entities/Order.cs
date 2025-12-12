@@ -12,11 +12,10 @@ public class Order() : Entity
     public DateTime AccomplishDate { get; set; } = DateTime.Today;
 
     [AttributePresentation(Label = "Data de Entrega")]
-    public required DateTime DeliveryDate { get; set; }
+    public DateTime DeliveryDate { get; set; }
 
-    public int LocalId { get; set; }
     [AttributePresentation(Label = "Local de Entregua")]
-    public required Address DeliveryPlace { get; set; }
+    public Address Address { get; set; } = null!;
 
     [AttributePresentation(Label = "Status do Pedido")]
     public OrderStatus Status { get; set; } = OrderStatus.ACTIVE;

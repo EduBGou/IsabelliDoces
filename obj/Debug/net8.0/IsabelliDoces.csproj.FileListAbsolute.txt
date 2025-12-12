@@ -128,3 +128,4 @@ C:\Users\eduar\Desktop\UTFPR\IsabelliDoces\obj\Debug\net8.0\refint\IsabelliDoces
 C:\Users\eduar\Desktop\UTFPR\IsabelliDoces\obj\Debug\net8.0\IsabelliDoces.pdb
 C:\Users\eduar\Desktop\UTFPR\IsabelliDoces\obj\Debug\net8.0\IsabelliDoces.genruntimeconfig.cache
 C:\Users\eduar\Desktop\UTFPR\IsabelliDoces\obj\Debug\net8.0\ref\IsabelliDoces.dll
+C:\Users\eduar\Desktop\UTFPR\IsabelliDoces\obj\Debug\net8.0\IsabelliDoces.sourcelink.json

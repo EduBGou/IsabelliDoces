@@ -2,5 +2,5 @@ namespace IsabelliDoces.Enums;
 
 public enum PermissionType
 {
-    CRUD_EMPLOYEE, CRUD_CLIENT
+    CRUD_EMPLOYEE, CRUD_CLIENT, LIST_ORDERS, UPDATE_ORDER, CANCEL_ORDER, CREATE_ORDER, CONFIRM_ORDER
 }

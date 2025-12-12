@@ -19,7 +19,6 @@ namespace IsabelliDoces.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    AddressType = table.Column<int>(type: "INTEGER", nullable: false),
                     Street = table.Column<string>(type: "TEXT", nullable: false),
                     Number = table.Column<string>(type: "TEXT", nullable: false),
                     Cep = table.Column<string>(type: "TEXT", nullable: false),
@@ -28,6 +27,20 @@ namespace IsabelliDoces.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Addresses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CakeFlavors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Price = table.Column<decimal>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CakeFlavors", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -50,15 +63,15 @@ namespace IsabelliDoces.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    AddressId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Phone = table.Column<string>(type: "TEXT", nullable: false)
+                    Phone = table.Column<string>(type: "TEXT", nullable: false),
+                    HomeId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Clients", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Clients_Addresses_AddressId",
-                        column: x => x.AddressId,
+                        name: "FK_Clients_Addresses_HomeId",
+                        column: x => x.HomeId,
                         principalTable: "Addresses",
                         principalColumn: "Id");
                 });
@@ -74,14 +87,14 @@ namespace IsabelliDoces.Migrations
                     Phone = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Password = table.Column<string>(type: "TEXT", nullable: false),
-                    AddressId = table.Column<int>(type: "INTEGER", nullable: true)
+                    HomeId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Employees_Addresses_AddressId",
-                        column: x => x.AddressId,
+                        name: "FK_Employees_Addresses_HomeId",
+                        column: x => x.HomeId,
                         principalTable: "Addresses",
                         principalColumn: "Id");
                 });
@@ -105,6 +118,30 @@ namespace IsabelliDoces.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DeliveryPlaces",
+                columns: table => new
+                {
+                    ClientId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AddressId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeliveryPlaces", x => new { x.ClientId, x.AddressId });
+                    table.ForeignKey(
+                        name: "FK_DeliveryPlaces_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DeliveryPlaces_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -113,16 +150,15 @@ namespace IsabelliDoces.Migrations
                     ClientId = table.Column<int>(type: "INTEGER", nullable: false),
                     AccomplishDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DeliveryDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    LocalId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DeliveryPlaceId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AddressId = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders_Addresses_DeliveryPlaceId",
-                        column: x => x.DeliveryPlaceId,
+                        name: "FK_Orders_Addresses_AddressId",
+                        column: x => x.AddressId,
                         principalTable: "Addresses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -162,13 +198,47 @@ namespace IsabelliDoces.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "OrderLines",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Amount = table.Column<int>(type: "INTEGER", nullable: false),
+                    OrderId = table.Column<int>(type: "INTEGER", nullable: true),
+                    CakeFlavorId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderLines", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderLines_CakeFlavors_CakeFlavorId",
+                        column: x => x.CakeFlavorId,
+                        principalTable: "CakeFlavors",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_OrderLines_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.InsertData(
                 table: "Addresses",
-                columns: new[] { "Id", "AddressType", "Cep", "Complement", "Number", "Street" },
+                columns: new[] { "Id", "Cep", "Complement", "Number", "Street" },
                 values: new object[,]
                 {
-                    { 1, 0, "12345-678", "Kitnet", "4226", "Rua Mato Fino" },
-                    { 2, 0, "54321-876", "", "9995", "Rua Floresta Grossa" }
+                    { 1, "12345-678", "Kitnet", "4226", "Rua Mato Fino" },
+                    { 2, "54321-876", "", "9995", "Rua Floresta Grossa" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "CakeFlavors",
+                columns: new[] { "Id", "Name", "Price" },
+                values: new object[,]
+                {
+                    { 1, "Chocolate", 30.00m },
+                    { 2, "Morango", 35.00m }
                 });
 
             migrationBuilder.InsertData(
@@ -178,7 +248,7 @@ namespace IsabelliDoces.Migrations
 
             migrationBuilder.InsertData(
                 table: "Clients",
-                columns: new[] { "Id", "AddressId", "Name", "Phone" },
+                columns: new[] { "Id", "HomeId", "Name", "Phone" },
                 values: new object[,]
                 {
                     { 1, 1, "Gustavo", "(44) 91234-5678" },
@@ -187,8 +257,8 @@ namespace IsabelliDoces.Migrations
 
             migrationBuilder.InsertData(
                 table: "Employees",
-                columns: new[] { "Id", "AddressId", "Cpf", "Email", "Name", "Password", "Phone" },
-                values: new object[] { 1, 2, "025.156.745-89", "edu@gmail.com", "Eduardo", "123", "(44) 91234-5678" });
+                columns: new[] { "Id", "Cpf", "Email", "HomeId", "Name", "Password", "Phone" },
+                values: new object[] { 1, "025.156.745-89", "edu@gmail.com", 2, "Eduardo", "123", "(44) 91234-5678" });
 
             migrationBuilder.InsertData(
                 table: "RolePermissions",
@@ -200,29 +270,54 @@ namespace IsabelliDoces.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "DeliveryPlaces",
+                columns: new[] { "AddressId", "ClientId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 1 },
+                    { 1, 2 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "RoleContracts",
                 columns: new[] { "Id", "EmployeeId", "EndDate", "RoleId", "StartDate" },
                 values: new object[] { 1, 1, null, 1, new DateTime(2025, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Clients_AddressId",
+                name: "IX_Clients_HomeId",
                 table: "Clients",
+                column: "HomeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeliveryPlaces_AddressId",
+                table: "DeliveryPlaces",
                 column: "AddressId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_AddressId",
+                name: "IX_Employees_HomeId",
                 table: "Employees",
+                column: "HomeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderLines_CakeFlavorId",
+                table: "OrderLines",
+                column: "CakeFlavorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderLines_OrderId",
+                table: "OrderLines",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_AddressId",
+                table: "Orders",
                 column: "AddressId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_ClientId",
                 table: "Orders",
                 column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orders_DeliveryPlaceId",
-                table: "Orders",
-                column: "DeliveryPlaceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleContracts_EmployeeId",
@@ -239,7 +334,10 @@ namespace IsabelliDoces.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "DeliveryPlaces");
+
+            migrationBuilder.DropTable(
+                name: "OrderLines");
 
             migrationBuilder.DropTable(
                 name: "RoleContracts");
@@ -248,13 +346,19 @@ namespace IsabelliDoces.Migrations
                 name: "RolePermissions");
 
             migrationBuilder.DropTable(
-                name: "Clients");
+                name: "CakeFlavors");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Clients");
 
             migrationBuilder.DropTable(
                 name: "Addresses");

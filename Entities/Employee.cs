@@ -1,15 +1,16 @@
+using IsabelliDoces.Interfaces;
 using IsabelliDoces.Utilities;
 
 namespace IsabelliDoces.Entities;
 
-public class Employee() : Entity
+public class Employee() : Entity, INameable
 {
     [AttributePresentation(Label = "CPF")]
     public string Cpf { get; init; } = string.Empty;
-    
-    [AttributePresentation(Label = "Nome", OnListing = true)]
-    public required string Name { get; init; } = string.Empty;
-    
+
+    [AttributePresentation(Label = "Nome", ListingOrder = 2)]
+    public string Name { get; set; } = string.Empty;
+
     [AttributePresentation(Label = "Telefone")]
     public string Phone { get; set; } = string.Empty;
     
@@ -20,7 +21,7 @@ public class Employee() : Entity
     public required string Password { get; set; } = string.Empty;
         
     [AttributePresentation(Label = "Endereço")]
-    public Address? Address { get; set; }
+    public Address? Home { get; set; }
 
     public bool VerifyPassword(string senha) => senha == Password;
 
@@ -40,5 +41,5 @@ public class Employee() : Entity
     }
 
     public override string ToString() =>
-        $"[{Id}]: {nameof(Name)} = {Name,30}, {nameof(Phone)} = {Phone,10},  {nameof(Email)} = {Email,20},  {nameof(Password)} = {Password,15}, {nameof(Address)} = {Address}";
+        $"[{Id}]: {nameof(Name)} = {Name,30}, {nameof(Phone)} = {Phone,10},  {nameof(Email)} = {Email,20},  {nameof(Password)} = {Password,15}, {nameof(Home)} = {Home}";
 }

@@ -6,16 +6,15 @@ public abstract class Menu()
 {
     protected virtual string MenuTitle => "";
     protected virtual string MenuSubtitle => "";
-    public virtual Menu PreviousMenuHierarchy => MenuManager.LoginMenu;
 
     protected virtual MenuOption[] AllOptions => [];
-    protected virtual Dictionary<int, MenuOption> AvaliableOptions { get; set; } = [];
 
     public virtual async Task Display(IsabelliDocesContext dbContext)
     {
         Console.Clear();
         Console.WriteLine($"=== {MenuTitle} ===");
-        AvaliableOptions = [];
+
+        Dictionary<int, MenuOption> avaliableOptions = [];
 
         if (!string.IsNullOrWhiteSpace(MenuSubtitle))
             Console.WriteLine(MenuSubtitle);
@@ -24,30 +23,28 @@ public abstract class Menu()
         foreach (var op in AllOptions)
         {
             if (!op.HavePermission(dbContext)) continue;
-            AvaliableOptions.Add(i, op);
+            avaliableOptions.Add(i, op);
             Console.WriteLine($"{i} - {op.Label}");
             i++;
         }
 
-        AvaliableOptions.Add(0, new("Voltar para a Tela de Login", (dbContext) =>
-            { _ = PreviousMenuHierarchy.Display(dbContext); }));
+        avaliableOptions.Add(0, new("Voltar para o Menu Anterior", (dbContext) => Task.CompletedTask));
 
-        Console.WriteLine($"0 - {AvaliableOptions[0].Label}");
+        Console.WriteLine($"0 - {avaliableOptions[0].Label}");
 
-        int input;
+        int optionChosen;
         while (true)
         {
             Console.Write("-> ");
-            try
+            string? iptStr = Console.ReadLine();
+
+            if (int.TryParse(iptStr, out optionChosen) && avaliableOptions.ContainsKey(optionChosen))
             {
-                input = Convert.ToInt32(Console.ReadLine());
-                if (0 <= input && input < i) break;
+                break;
             }
-            catch
-            {
-                Console.WriteLine("Informe um valor válido!");
-            }
+
+            Console.WriteLine("Informe uma opção válida!");
         }
-        AvaliableOptions[input].Action(dbContext);
+        await avaliableOptions[optionChosen].Action(dbContext);
     }
 }

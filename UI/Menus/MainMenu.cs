@@ -6,6 +6,7 @@ public class MainMenu() : Menu
     protected override string MenuSubtitle => $"Bem vindo(a) {MenuManager.LoginMenu.GetUser()?.Name}.";
 
     protected override MenuOption[] AllOptions => [
-        new("Funcionários", (context) => { _ = MenuManager.EmployeeMenu.Display(context); }),
+        new("Funcionários", MenuManager.EmployeeMenu.Display),
+        new("Pedidos", MenuManager.OrderMenu.Display)
     ];
 }

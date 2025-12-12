@@ -7,7 +7,12 @@ public static class PropertyMetadataReader
     public static List<PropertyMeta> GetPropertyMetadatas<T>(T model)
     {
         var list = new List<PropertyMeta>();
-        foreach (var p in typeof(T).GetProperties())
+
+
+        var properties = typeof(T).GetProperties()
+            .OrderBy(p => p.GetCustomAttribute<AttributePresentation>()?.ListingOrder ?? int.MaxValue);
+
+        foreach (var p in properties)
         {
             var attr = p.GetCustomAttribute<AttributePresentation>();
             if (attr is null) continue;
