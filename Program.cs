@@ -1,14 +1,13 @@
+using Microsoft.EntityFrameworkCore;
 using IsabelliDoces.Data;
-using IsabelliDoces.Endpoints;
+using IsabelliDoces.UI;
 
-var builder = WebApplication.CreateBuilder(args);
 
-var connString = builder.Configuration.GetConnectionString("IsabelliDoces");
-builder.Services.AddSqlite<IsabelliDocesContext>(connString);
+var optionsBuilder = new DbContextOptionsBuilder<IsabelliDocesContext>();
+optionsBuilder.UseSqlite(IsabelliDocesContextFactory.CONNECTION_STRING);
 
-var app = builder.Build();
-app.MapClientsEndpoints();
-app.MapAddressesEndPoints();
+using var dbContext = new IsabelliDocesContext(optionsBuilder.Options);
 
-await app.MigrateDbAsync();
-app.Run();
+await dbContext.Database.MigrateAsync();
+
+await MenuManager.StartProgram(dbContext);

@@ -4,7 +4,7 @@ namespace IsabelliDoces.Utilities;
 
 public static class AutoMapper
 {
-    public static TDestination Map<TSource, TDestination>(this TSource source) where TDestination : new()
+    public static TDestination Map<TSource, TDestination>(this TSource source, int id = 0) where TDestination : new()
     {
         if (source is null)
             throw new ArgumentNullException(nameof(source));
@@ -27,6 +27,11 @@ public static class AutoMapper
                 var value = sProp.GetValue(source);
                 dProp.SetValue(dest, value);
             }
+        }
+        if (id != 0)
+        {
+            var idProp = typeof(TDestination).GetProperty("Id");
+            idProp?.SetValue(dest, id);
         }
 
         return dest;

@@ -1,50 +1,53 @@
+using IsabelliDoces.Data;
 
-// namespace IsabelliDoces.UI;
+namespace IsabelliDoces.UI;
 
-// public abstract class Menu()
-// {
-//     protected virtual string MenuTitle => "";
-//     protected virtual string MenuSubtitle => "";
-//     public virtual Menu PreviousMenuHierarchy => MenuManager.LoginMenu;
+public abstract class Menu()
+{
+    protected virtual string MenuTitle => "";
+    protected virtual string MenuSubtitle => "";
+    public virtual Menu PreviousMenuHierarchy => MenuManager.LoginMenu;
 
-//     protected virtual MenuOption[] AllOptions => [];
-//     protected virtual Dictionary<int, MenuOption> AvaliableOptions { get; set; } = [];
+    protected virtual MenuOption[] AllOptions => [];
+    protected virtual Dictionary<int, MenuOption> AvaliableOptions { get; set; } = [];
 
-//     public virtual void Display()
-//     {
-//         Console.Clear();
-//         Console.WriteLine($"=== {MenuTitle} ===");
-//         AvaliableOptions = [];
+    public virtual async Task Display(IsabelliDocesContext dbContext)
+    {
+        Console.Clear();
+        Console.WriteLine($"=== {MenuTitle} ===");
+        AvaliableOptions = [];
 
-//         if (!string.IsNullOrWhiteSpace(MenuSubtitle))
-//             Console.WriteLine(MenuSubtitle);
+        if (!string.IsNullOrWhiteSpace(MenuSubtitle))
+            Console.WriteLine(MenuSubtitle);
 
-//         int i = 1;
-//         foreach (var op in AllOptions)
-//         {
-//             if (!op.HavePermission()) continue;
-//             AvaliableOptions.Add(i, op);
-//             Console.WriteLine($"{i} - {op.Label}");
-//             i++;
-//         }
+        int i = 1;
+        foreach (var op in AllOptions)
+        {
+            if (!op.HavePermission(dbContext)) continue;
+            AvaliableOptions.Add(i, op);
+            Console.WriteLine($"{i} - {op.Label}");
+            i++;
+        }
 
-//         AvaliableOptions.Add(0, new("Voltar para a Tela de Login", PreviousMenuHierarchy.Display));
-//         Console.WriteLine($"0 - {AvaliableOptions[0].Label}");
+        AvaliableOptions.Add(0, new("Voltar para a Tela de Login", (dbContext) =>
+            { _ = PreviousMenuHierarchy.Display(dbContext); }));
 
-//         int input;
-//         while (true)
-//         {
-//             Console.Write("-> ");
-//             try
-//             {
-//                 input = Convert.ToInt32(Console.ReadLine());
-//                 if (0 <= input && input < i) break;
-//             }
-//             catch
-//             {
-//                 Console.WriteLine("Informe um valor válido!");
-//             }
-//         }
-//         AvaliableOptions[input].Action();
-//     }
-// }
+        Console.WriteLine($"0 - {AvaliableOptions[0].Label}");
+
+        int input;
+        while (true)
+        {
+            Console.Write("-> ");
+            try
+            {
+                input = Convert.ToInt32(Console.ReadLine());
+                if (0 <= input && input < i) break;
+            }
+            catch
+            {
+                Console.WriteLine("Informe um valor válido!");
+            }
+        }
+        AvaliableOptions[input].Action(dbContext);
+    }
+}

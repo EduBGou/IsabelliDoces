@@ -2,12 +2,13 @@
 
 namespace IsabelliDoces.Dtos.ClientDtos;
 
-public record class CreateClientDto(
+public record class CreateClientDto()
+{
     [Required][StringLength(50)]
-    string Name,
+    public string? Name { get; init; }
 
     [Required][StringLength(20)]
-    string Phone,
+    public string? Phone { get; init; }
 
-    int AddressId
-);
+    public int AddressId { get; init; }
+}

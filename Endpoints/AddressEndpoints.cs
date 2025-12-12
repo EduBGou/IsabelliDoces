@@ -1,7 +1,6 @@
 ﻿using IsabelliDoces.Data;
 using IsabelliDoces.Dtos.AddressDtos;
 using IsabelliDoces.Entities;
-using IsabelliDoces.Mapping;
 using IsabelliDoces.Utilities;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,8 +14,7 @@ public static class GenreEndpoints
 
         group.MapGet("/", async (IsabelliDocesContext dbContext) =>
                 await dbContext.Addresses
-                    .Select(g => g.Map<Address, AddressDto>())
-                    .AsNoTracking()
+                    .Select(g => g.Map<Address, AddressDetailsDto>(0))
                     .ToListAsync()
                 );
 

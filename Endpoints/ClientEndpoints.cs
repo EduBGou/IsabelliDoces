@@ -1,7 +1,7 @@
 ﻿using IsabelliDoces.Data;
 using IsabelliDoces.Dtos.ClientDtos;
 using IsabelliDoces.Entities;
-using IsabelliDoces.Mapping;
+using IsabelliDoces.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,8 +18,8 @@ public static class GamesEndpoints
         // GET /clients/
         group.MapGet("/", async (IsabelliDocesContext dbContext) =>
             await dbContext.Clients
-                .Include(g => g.Address)
-                .Select(g => g.ToGameSummaryDto())
+                .Include(c => c.Address)
+                .Select(c => c.Map<Client, ClientSummaryDto>(0))
                 .AsNoTracking()
                 .ToListAsync()
         );
@@ -29,7 +29,7 @@ public static class GamesEndpoints
         group.MapGet("/{id}", async (int id, IsabelliDocesContext dbContext) =>
         {
             Client? client = await dbContext.Clients.FindAsync(id);
-            return client is null ? Results.NotFound() : Results.Ok(client.ToGameDetailsDto());
+            return client is null ? Results.NotFound() : Results.Ok(client.Map<Client, ClientDetailsDto>());
 
         }).WithName(GET_CLIENT_ENDPOINT_NAME);
 
@@ -37,7 +37,7 @@ public static class GamesEndpoints
         // POST /clients/
         group.MapPost("/", async ([FromBody] CreateClientDto newClient, IsabelliDocesContext dbContext) =>
         {
-            Client client = newClient.ToEntity();
+            var client = newClient.Map<CreateClientDto, Client>();
 
             dbContext.Clients.Add(client);
             await dbContext.SaveChangesAsync();
@@ -45,7 +45,7 @@ public static class GamesEndpoints
             return Results.CreatedAtRoute(
                 GET_CLIENT_ENDPOINT_NAME,
                 new { id = client.Id },
-                client.ToGameDetailsDto()
+                client.Map<Client, ClientDetailsDto>()
             );
         });
 
@@ -60,7 +60,7 @@ public static class GamesEndpoints
                 return Results.NotFound();
             }
 
-            dbContext.Clients.Entry(existingClient).CurrentValues.SetValues(updatedClient.ToEntity(id));
+            dbContext.Clients.Entry(existingClient).CurrentValues.SetValues(updatedClient.Map<UpdateClientDto, Client>(id));
             await dbContext.SaveChangesAsync();
 
             return Results.NoContent();

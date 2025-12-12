@@ -1,24 +1,20 @@
-﻿namespace IsabelliDoces.Entities;
+﻿using IsabelliDoces.Enums;
 
-public class Address
+namespace IsabelliDoces.Entities;
+
+public class Address() : Entity
 {
-    public Address()
-    {
-
-    }
-
-    public int Id { get; set; }
-    public required int Type { get; set; }
-    public required string Street { get; set; }
-    public required string Number { get; set; } = string.Empty;
-    public required string Cep { get; set; } = string.Empty;
+    public AddressType AddressType { get; set; } = AddressType.RESIDENTIAL;
+    public string Street { get; init; } = string.Empty;
+    public string Number { get; set; } = string.Empty;
+    public string Cep { get; set; } = string.Empty;
     public string Complement { get; set; } = string.Empty;
 
     public override string ToString()
     {
-        if (Complement is null)
-            return $"[{Id}]: {Type}, {Street}, {Number}, CEP {Cep}";
+        if (string.IsNullOrWhiteSpace(Complement))
+            return $"[{Id}]: {AddressType.ToString().ToLower()}, {Street}, {Number}, CEP {Cep}";
         else
-            return $"[{Id}]: {Type}, {Street}, {Number}, {Complement}, CEP {Cep}";
+            return $"[{Id}]: {AddressType.ToString().ToLower()}, {Street}, {Number}, {Complement}, CEP {Cep}";
     }
 }
