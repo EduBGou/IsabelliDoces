@@ -21,8 +21,8 @@ namespace IsabelliDoces.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Street = table.Column<string>(type: "TEXT", nullable: false),
                     Number = table.Column<string>(type: "TEXT", nullable: false),
-                    Cep = table.Column<string>(type: "TEXT", nullable: false),
-                    Complement = table.Column<string>(type: "TEXT", nullable: false)
+                    Complement = table.Column<string>(type: "TEXT", nullable: false),
+                    Cep = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -150,15 +150,15 @@ namespace IsabelliDoces.Migrations
                     ClientId = table.Column<int>(type: "INTEGER", nullable: false),
                     AccomplishDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DeliveryDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AddressId = table.Column<int>(type: "INTEGER", nullable: false),
+                    DeliveryAddressId = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders_Addresses_AddressId",
-                        column: x => x.AddressId,
+                        name: "FK_Orders_Addresses_DeliveryAddressId",
+                        column: x => x.DeliveryAddressId,
                         principalTable: "Addresses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -204,8 +204,8 @@ namespace IsabelliDoces.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Amount = table.Column<int>(type: "INTEGER", nullable: false),
                     OrderId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Amount = table.Column<int>(type: "INTEGER", nullable: false),
                     CakeFlavorId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
@@ -266,7 +266,12 @@ namespace IsabelliDoces.Migrations
                 values: new object[,]
                 {
                     { 0, 1 },
-                    { 1, 1 }
+                    { 1, 1 },
+                    { 2, 1 },
+                    { 3, 1 },
+                    { 4, 1 },
+                    { 5, 1 },
+                    { 6, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -310,14 +315,14 @@ namespace IsabelliDoces.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_AddressId",
-                table: "Orders",
-                column: "AddressId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Orders_ClientId",
                 table: "Orders",
                 column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_DeliveryAddressId",
+                table: "Orders",
+                column: "DeliveryAddressId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleContracts_EmployeeId",

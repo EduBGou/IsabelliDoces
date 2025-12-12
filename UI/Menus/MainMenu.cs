@@ -1,3 +1,5 @@
+using IsabelliDoces.Data;
+
 namespace IsabelliDoces.UI.Menus;
 
 public class MainMenu() : Menu
@@ -6,7 +8,15 @@ public class MainMenu() : Menu
     protected override string MenuSubtitle => $"Bem vindo(a) {MenuManager.LoginMenu.GetUser()?.Name}.";
 
     protected override MenuOption[] AllOptions => [
-        new("Funcionários", MenuManager.EmployeeMenu.Display),
-        new("Pedidos", MenuManager.OrderMenu.Display)
+        new("Funcionários", (context, label) => MenuManager.EmployeeMenu.Display(context) ),
+        new("Pedidos", (context, label) => MenuManager.OrderMenu.Display(context) )
     ];
+
+    public override async Task Display(IsabelliDocesContext dbContext)
+    {
+        while (true)
+        {
+            await base.Display(dbContext);
+        }
+    }
 }

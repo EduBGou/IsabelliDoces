@@ -1,5 +1,5 @@
 using IsabelliDoces.Entities;
-using Microsoft.EntityFrameworkCore;
+using IsabelliDoces.Utilities;
 
 namespace IsabelliDoces.Relations;
 

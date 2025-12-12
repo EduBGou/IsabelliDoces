@@ -40,6 +40,5 @@ public class Employee() : Entity, INameable
         Password = newPassword;
     }
 
-    public override string ToString() =>
-        $"[{Id}]: {nameof(Name)} = {Name,30}, {nameof(Phone)} = {Phone,10},  {nameof(Email)} = {Email,20},  {nameof(Password)} = {Password,15}, {nameof(Home)} = {Home}";
+    public override string ToString() => Name;
 }

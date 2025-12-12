@@ -191,10 +191,10 @@ namespace IsabelliDoces.Migrations
                     b.Property<DateTime>("AccomplishDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("AddressId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ClientId")
+                    b.Property<int>("DeliveryAddressId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DeliveryDate")
@@ -205,9 +205,9 @@ namespace IsabelliDoces.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
-
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("DeliveryAddressId");
 
                     b.ToTable("Orders");
                 });
@@ -348,6 +348,31 @@ namespace IsabelliDoces.Migrations
                         {
                             RoleId = 1,
                             PermissionType = 0
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionType = 5
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionType = 3
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionType = 6
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionType = 2
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionType = 4
                         });
                 });
 
@@ -371,21 +396,21 @@ namespace IsabelliDoces.Migrations
 
             modelBuilder.Entity("IsabelliDoces.Entities.Order", b =>
                 {
-                    b.HasOne("IsabelliDoces.Entities.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("IsabelliDoces.Entities.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Address");
+                    b.HasOne("IsabelliDoces.Entities.Address", "DeliveryAddress")
+                        .WithMany()
+                        .HasForeignKey("DeliveryAddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Client");
+
+                    b.Navigation("DeliveryAddress");
                 });
 
             modelBuilder.Entity("IsabelliDoces.Entities.OrderLine", b =>

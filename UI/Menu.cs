@@ -1,3 +1,4 @@
+using System.Reflection.Emit;
 using IsabelliDoces.Data;
 
 namespace IsabelliDoces.UI;
@@ -28,7 +29,7 @@ public abstract class Menu()
             i++;
         }
 
-        avaliableOptions.Add(0, new("Voltar para o Menu Anterior", (dbContext) => Task.CompletedTask));
+        avaliableOptions.Add(0, new("Voltar para o Menu Anterior", (dbContext, label) => Task.CompletedTask));
 
         Console.WriteLine($"0 - {avaliableOptions[0].Label}");
 
@@ -39,12 +40,11 @@ public abstract class Menu()
             string? iptStr = Console.ReadLine();
 
             if (int.TryParse(iptStr, out optionChosen) && avaliableOptions.ContainsKey(optionChosen))
-            {
                 break;
-            }
 
             Console.WriteLine("Informe uma opção válida!");
         }
-        await avaliableOptions[optionChosen].Action(dbContext);
+        if (optionChosen == 0) return;
+        await avaliableOptions[optionChosen].Execute(dbContext);
     }
 }

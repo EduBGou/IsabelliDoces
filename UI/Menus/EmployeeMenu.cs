@@ -13,8 +13,12 @@ public class EmployeeMenu() : Menu
         new("Listar/Alterar Funcionários", ListEmployee, PermissionType.CRUD_EMPLOYEE),
     ];
 
-    private async Task ListEmployee(IsabelliDocesContext dbContext)
+    private async Task ListEmployee(IsabelliDocesContext dbContext, string label)
     {
-        await MenuExtention.Listing<Employee>(dbContext);
+        Console.Clear();
+        Console.WriteLine($"=== {label.ToUpper()} ===");
+        await MenuExtention.ListingAsync<Employee>(dbContext);
+        Console.WriteLine("\nPressione qualquer tecla pra voltar.");
+        Console.ReadKey();
     }
 }

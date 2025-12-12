@@ -1,22 +1,34 @@
+using IsabelliDoces.Data;
 using IsabelliDoces.Enums;
+using IsabelliDoces.UI.Helpers;
 using IsabelliDoces.Utilities;
+using Microsoft.EntityFrameworkCore;
 
 namespace IsabelliDoces.Entities;
 
 public class Order() : Entity
 {
-    [AttributePresentation(Label = "Cliente")]
+    [AttributePresentation(Label = "Cliente", ListingOrder = 2)]
     public required Client Client { get; init; }
 
-    [AttributePresentation(Label = "Data de Realização")]
+    [AttributePresentation(Label = "Data de Realização", ListingOrder = 3)]
     public DateTime AccomplishDate { get; set; } = DateTime.Today;
 
-    [AttributePresentation(Label = "Data de Entrega")]
+    [AttributePresentation(Label = "Data de Entrega", ListingOrder = 4)]
     public DateTime DeliveryDate { get; set; }
 
-    [AttributePresentation(Label = "Local de Entregua")]
-    public Address Address { get; set; } = null!;
+    [AttributePresentation(Label = "Local de Entrega")]
+    public Address DeliveryAddress { get; set; } = null!;
 
-    [AttributePresentation(Label = "Status do Pedido")]
+    [AttributePresentation(Label = "Status do Pedido", ListingOrder = 5)]
     public OrderStatus Status { get; set; } = OrderStatus.ACTIVE;
+
+
+    public async Task<List<OrderLine>> ListingLinesAsync(IsabelliDocesContext dbContext, bool print = true)
+    {
+        Console.WriteLine($"\nEstas são as linhas do pedido:");
+        return await MenuExtention.ListingAsync<OrderLine>(dbContext, print, q => q
+            .Include(ol => ol.Order).Include(ol => ol.CakeFlavor)
+            .Where(ol => ol.Order!.Id == Id));
+    }
 }

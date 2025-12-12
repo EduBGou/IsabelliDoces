@@ -17,7 +17,6 @@ public class IsabelliDocesContext(DbContextOptions<IsabelliDocesContext> options
     public DbSet<Employee> Employees => Set<Employee>();
     public DbSet<OrderLine> OrderLines => Set<OrderLine>();
     public DbSet<CakeFlavor> CakeFlavors => Set<CakeFlavor>();
-    // public DbSet<AddressUsage> AddressUsages => Set<AddressUsage>();
     public DbSet<RoleContract> RoleContracts => Set<RoleContract>();
     public DbSet<DeliveryPlace> DeliveryPlaces => Set<DeliveryPlace>();
     public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
@@ -81,11 +80,7 @@ public class IsabelliDocesContext(DbContextOptions<IsabelliDocesContext> options
         const string ROLE_FK_NAME = "RoleId";
         modelBuilder.Entity<RolePermission>(e =>
         {
-            // e.Property<int>(ROLE_FK_NAME);
             e.HasKey(ROLE_FK_NAME, nameof(RolePermission.PermissionType));
-            // e.HasOne(rp => rp.Role)
-            // .WithMany(r => r.Permissions);
-            // .HasForeignKey(ROLE_FK_NAME);
         });
 
 
@@ -98,7 +93,11 @@ public class IsabelliDocesContext(DbContextOptions<IsabelliDocesContext> options
         modelBuilder.Entity<RolePermission>().HasData(
             new { RoleId = 1, PermissionType = PermissionType.CRUD_CLIENT },
             new { RoleId = 1, PermissionType = PermissionType.CRUD_EMPLOYEE },
-            new { RoleId = 1, PermissionType = PermissionType.CREATE_ORDER }
+            new { RoleId = 1, PermissionType = PermissionType.CREATE_ORDER },
+            new { RoleId = 1, PermissionType = PermissionType.UPDATE_ORDER },
+            new { RoleId = 1, PermissionType = PermissionType.CONFIRM_ORDER },
+            new { RoleId = 1, PermissionType = PermissionType.LIST_ORDERS },
+            new { RoleId = 1, PermissionType = PermissionType.CANCEL_ORDER }
         );
 
 

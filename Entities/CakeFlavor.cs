@@ -10,4 +10,7 @@ public class CakeFlavor() : Entity, INameable
 
     [AttributePresentation(Label = "Preço Unitário", ListingOrder = 3)]
     public decimal Price { get; set; }
+
+    public override string ToString() => Name;
 }
+

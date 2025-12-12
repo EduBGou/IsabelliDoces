@@ -16,11 +16,5 @@ public class Address() : Entity
     [AttributePresentation(Label = "CEP", ListingOrder = 5)]
     public string Cep { get; set; } = string.Empty;
 
-    public override string ToString()
-    {
-        if (string.IsNullOrWhiteSpace(Complement))
-            return $"[{Id}]: {Street}, {Number}, CEP {Cep}";
-        else
-            return $"[{Id}]: {Street}, {Number}, {Complement}, CEP {Cep}";
-    }
+    public override string ToString() => $"{Street}, Nº {Number}";
 }

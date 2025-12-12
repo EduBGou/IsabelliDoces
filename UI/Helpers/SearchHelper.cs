@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using IsabelliDoces.Data;
 using IsabelliDoces.Entities;
 using IsabelliDoces.Interfaces;
@@ -7,12 +8,14 @@ namespace IsabelliDoces.UI.Helpers;
 
 public static class SearchHelper
 {
-    public static async Task<T?> SearchById<T>(IsabelliDocesContext dbContext) where T : Entity
+    public static async Task<T?> SearchById<T>(
+        IsabelliDocesContext dbContext) where T : Entity
     {
-        Console.WriteLine("Informe o ID do registro (ou pressione ENTER para voltar):");
+        Console.WriteLine("\nInforme o ID do registro (ou pressione ENTER para voltar):");
         T entityFound;
 
         var id = InputHelper.GetInputInt();
+
         if (id is null) return null;
 
         while (true)

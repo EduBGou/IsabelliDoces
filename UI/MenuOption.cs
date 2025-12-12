@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IsabelliDoces.UI;
 
-public class MenuOption(string label, Func<IsabelliDocesContext, Task> action, params PermissionType[] permissions)
+public class MenuOption(string label, Func<IsabelliDocesContext, string, Task> action, params PermissionType[] permissions)
 {
     public string Label { get; } = label;
-    public Func<IsabelliDocesContext, Task> Action { get; } = action;
+    protected Func<IsabelliDocesContext, string, Task> Action { get; } = action;
     public PermissionType[] RequiredPermissions { get; } = permissions;
 
     public bool HavePermission(IsabelliDocesContext dbContext)
@@ -33,5 +33,10 @@ public class MenuOption(string label, Func<IsabelliDocesContext, Task> action, p
             }
         }
         return RequiredPermissions.All(userPermissions.Contains);
+    }
+
+    public async Task Execute(IsabelliDocesContext dbContext)
+    {
+        await Action(dbContext, Label);
     }
 }
