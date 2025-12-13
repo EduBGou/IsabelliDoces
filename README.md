@@ -41,7 +41,7 @@ O sistema possui diferentes cargos, cada um com um conjunto específico de permi
 | :--- | :--- | :--- | :--- |
 | **SUPERADMIN** | Todas as permissões. | `edu@gmail.com` | `123` |
 | **ADMIN** | CRUD de Cliente e Funcionários. | `isa@gmail.com` | `321` |
-| **ATENDENTE** | Cadastrar, Listar, Alterar e Cancelar Pedido. | `isa@gmail.com` | `321` |
+| **ATENDENTE** | CRUD de Cliente, Cadastrar, Listar, Alterar e Cancelar Pedido. | `isa@gmail.com` | `321` |
 | **ENTREGADOR** | Listar Pedido e Confirmar Entrega de Pedido. | `scopel@gmail.com` | `852` |
 
 ---

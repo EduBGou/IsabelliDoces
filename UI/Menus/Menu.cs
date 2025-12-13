@@ -1,7 +1,6 @@
 using IsabelliDoces.Data;
-using IsabelliDoces.UI.Menus;
 
-namespace IsabelliDoces.UI;
+namespace IsabelliDoces.UI.Menus;
 
 public abstract class Menu()
 {

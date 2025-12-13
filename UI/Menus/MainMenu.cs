@@ -15,6 +15,9 @@ public class MainMenu() : Menu
         new("Funcionários", (context, label) =>
             MenuManager.EmployeeMenu.Display(context),
             PermissionType.CRUD_EMPLOYEE),
+        new("Clientes", (context, label) =>
+            MenuManager.ClientMenu.Display(context),
+            PermissionType.CRUD_CLIENT),
         new("Pedidos", (context, label) => MenuManager.OrderMenu.Display(context),
             PermissionType.MENU_ORDER),
         new("Encerrar Programa", (context, label) =>
