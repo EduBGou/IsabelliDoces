@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace IsabelliDoces.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -229,7 +229,9 @@ namespace IsabelliDoces.Migrations
                 values: new object[,]
                 {
                     { 1, "12345-678", "Kitnet", "4226", "Rua Mato Fino" },
-                    { 2, "54321-876", "", "9995", "Rua Floresta Grossa" }
+                    { 2, "78221-351", "", "9995", "Rua Floresta Grossa" },
+                    { 3, "54321-876", "Casa Azul", "9855", "Rua Luis Hasper" },
+                    { 4, "54321-876", "Casa Amarela", "871", "Rua Luis Hasper" }
                 });
 
             migrationBuilder.InsertData(
@@ -237,14 +239,21 @@ namespace IsabelliDoces.Migrations
                 columns: new[] { "Id", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 1, "Chocolate", 30.00m },
-                    { 2, "Morango", 35.00m }
+                    { 1, "Chocolate", 40.00m },
+                    { 2, "Morango", 50.00m },
+                    { 3, "Pistache", 60.00m }
                 });
 
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { 1, "Admin" });
+                values: new object[,]
+                {
+                    { 1, "SuperAdmin" },
+                    { 2, "Admin" },
+                    { 3, "Atendente" },
+                    { 4, "Entregador" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Clients",
@@ -252,13 +261,19 @@ namespace IsabelliDoces.Migrations
                 values: new object[,]
                 {
                     { 1, 1, "Gustavo", "(44) 91234-5678" },
-                    { 2, 2, "Lana", "(44) 95555-4444" }
+                    { 2, 2, "Lana", "(44) 95555-4444" },
+                    { 3, 1, "Vincius", "(44) 96666-1050" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Employees",
                 columns: new[] { "Id", "Cpf", "Email", "HomeId", "Name", "Password", "Phone" },
-                values: new object[] { 1, "025.156.745-89", "edu@gmail.com", 2, "Eduardo", "123", "(44) 91234-5678" });
+                values: new object[,]
+                {
+                    { 1, "025.156.745-89", "edu@gmail.com", 2, "Eduardo", "123", "(44) 91234-5678" },
+                    { 2, "010.174.775-54", "isa@gmail.com", 3, "Isabelli", "321", "(44) 95445-1643" },
+                    { 3, "410.214.875-12", "scopel@gmail.com", 4, "Scopel", "852", "(44) 97847-6941" }
+                });
 
             migrationBuilder.InsertData(
                 table: "RolePermissions",
@@ -271,7 +286,15 @@ namespace IsabelliDoces.Migrations
                     { 3, 1 },
                     { 4, 1 },
                     { 5, 1 },
-                    { 6, 1 }
+                    { 6, 1 },
+                    { 0, 2 },
+                    { 1, 2 },
+                    { 2, 3 },
+                    { 3, 3 },
+                    { 4, 3 },
+                    { 5, 3 },
+                    { 2, 4 },
+                    { 6, 4 }
                 });
 
             migrationBuilder.InsertData(
@@ -281,13 +304,20 @@ namespace IsabelliDoces.Migrations
                 {
                     { 1, 1 },
                     { 2, 1 },
-                    { 1, 2 }
+                    { 1, 2 },
+                    { 3, 2 }
                 });
 
             migrationBuilder.InsertData(
                 table: "RoleContracts",
                 columns: new[] { "Id", "EmployeeId", "EndDate", "RoleId", "StartDate" },
-                values: new object[] { 1, 1, null, 1, new DateTime(2025, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) });
+                values: new object[,]
+                {
+                    { 1, 1, null, 1, new DateTime(2025, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, 2, null, 2, new DateTime(2025, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, 2, null, 3, new DateTime(2025, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, 3, null, 4, new DateTime(2025, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Clients_HomeId",

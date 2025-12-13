@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IsabelliDoces.Migrations
 {
     [DbContext(typeof(IsabelliDocesContext))]
-    [Migration("20251212233122_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251213002600_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,10 +58,26 @@ namespace IsabelliDoces.Migrations
                         new
                         {
                             Id = 2,
-                            Cep = "54321-876",
+                            Cep = "78221-351",
                             Complement = "",
                             Number = "9995",
                             Street = "Rua Floresta Grossa"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Cep = "54321-876",
+                            Complement = "Casa Azul",
+                            Number = "9855",
+                            Street = "Rua Luis Hasper"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Cep = "54321-876",
+                            Complement = "Casa Amarela",
+                            Number = "871",
+                            Street = "Rua Luis Hasper"
                         });
                 });
 
@@ -87,13 +103,19 @@ namespace IsabelliDoces.Migrations
                         {
                             Id = 1,
                             Name = "Chocolate",
-                            Price = 30.00m
+                            Price = 40.00m
                         },
                         new
                         {
                             Id = 2,
                             Name = "Morango",
-                            Price = 35.00m
+                            Price = 50.00m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Pistache",
+                            Price = 60.00m
                         });
                 });
 
@@ -134,6 +156,13 @@ namespace IsabelliDoces.Migrations
                             HomeId = 2,
                             Name = "Lana",
                             Phone = "(44) 95555-4444"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            HomeId = 1,
+                            Name = "Vincius",
+                            Phone = "(44) 96666-1050"
                         });
                 });
 
@@ -182,6 +211,26 @@ namespace IsabelliDoces.Migrations
                             Name = "Eduardo",
                             Password = "123",
                             Phone = "(44) 91234-5678"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Cpf = "010.174.775-54",
+                            Email = "isa@gmail.com",
+                            HomeId = 3,
+                            Name = "Isabelli",
+                            Password = "321",
+                            Phone = "(44) 95445-1643"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Cpf = "410.214.875-12",
+                            Email = "scopel@gmail.com",
+                            HomeId = 4,
+                            Name = "Scopel",
+                            Password = "852",
+                            Phone = "(44) 97847-6941"
                         });
                 });
 
@@ -257,7 +306,22 @@ namespace IsabelliDoces.Migrations
                         new
                         {
                             Id = 1,
+                            Name = "SuperAdmin"
+                        },
+                        new
+                        {
+                            Id = 2,
                             Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Atendente"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Entregador"
                         });
                 });
 
@@ -294,6 +358,27 @@ namespace IsabelliDoces.Migrations
                             EmployeeId = 1,
                             RoleId = 1,
                             StartDate = new DateTime(2025, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            EmployeeId = 2,
+                            RoleId = 2,
+                            StartDate = new DateTime(2025, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            EmployeeId = 2,
+                            RoleId = 3,
+                            StartDate = new DateTime(2025, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            EmployeeId = 3,
+                            RoleId = 4,
+                            StartDate = new DateTime(2025, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -326,6 +411,11 @@ namespace IsabelliDoces.Migrations
                         {
                             ClientId = 2,
                             AddressId = 1
+                        },
+                        new
+                        {
+                            ClientId = 2,
+                            AddressId = 3
                         });
                 });
 
@@ -376,6 +466,46 @@ namespace IsabelliDoces.Migrations
                         {
                             RoleId = 1,
                             PermissionType = 4
+                        },
+                        new
+                        {
+                            RoleId = 3,
+                            PermissionType = 5
+                        },
+                        new
+                        {
+                            RoleId = 3,
+                            PermissionType = 3
+                        },
+                        new
+                        {
+                            RoleId = 3,
+                            PermissionType = 2
+                        },
+                        new
+                        {
+                            RoleId = 3,
+                            PermissionType = 4
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            PermissionType = 0
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            PermissionType = 1
+                        },
+                        new
+                        {
+                            RoleId = 4,
+                            PermissionType = 2
+                        },
+                        new
+                        {
+                            RoleId = 4,
+                            PermissionType = 6
                         });
                 });
 

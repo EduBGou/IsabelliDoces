@@ -1,5 +1,5 @@
-using System.Reflection.Emit;
 using IsabelliDoces.Data;
+using IsabelliDoces.UI.Menus;
 
 namespace IsabelliDoces.UI;
 
@@ -8,10 +8,13 @@ public abstract class Menu()
     protected virtual string MenuTitle => "";
     protected virtual string MenuSubtitle => "";
 
+    protected virtual Func<IsabelliDocesContext, string, Task> GoBackFunction =>
+        (dbContext, label) => Task.CompletedTask;
     protected virtual MenuOption[] AllOptions => [];
 
     public virtual async Task Display(IsabelliDocesContext dbContext)
     {
+
         Console.Clear();
         Console.WriteLine($"=== {MenuTitle} ===");
 
@@ -29,7 +32,7 @@ public abstract class Menu()
             i++;
         }
 
-        avaliableOptions.Add(0, new("Voltar para o Menu Anterior", (dbContext, label) => Task.CompletedTask));
+        avaliableOptions.Add(0, new("Voltar para o Menu Anterior", GoBackFunction));
 
         Console.WriteLine($"0 - {avaliableOptions[0].Label}");
 
@@ -44,7 +47,6 @@ public abstract class Menu()
 
             Console.WriteLine("Informe uma opção válida!");
         }
-        if (optionChosen == 0) return;
         await avaliableOptions[optionChosen].Execute(dbContext);
     }
 }

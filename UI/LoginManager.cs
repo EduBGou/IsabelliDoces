@@ -2,13 +2,13 @@ using IsabelliDoces.Data;
 using IsabelliDoces.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace IsabelliDoces.UI.Menus;
+namespace IsabelliDoces.UI;
 
-public class LoginMenu() : Menu
+public static class LoginManager
 {
     private static Employee? User { get; set; }
 
-    public Employee GetUser()
+    public static Employee GetUser()
     {
         if (User is null)
         {
@@ -17,7 +17,7 @@ public class LoginMenu() : Menu
         return User;
     }
 
-    public override async Task Display(IsabelliDocesContext dbContext)
+    public static async Task Login(IsabelliDocesContext dbContext)
     {
         while (true)
         {
@@ -52,7 +52,8 @@ public class LoginMenu() : Menu
                 continue;
             }
             User = funcionario;
-            await MenuManager.MainMenu.Display(dbContext);
+            break;
         }
+        await MenuManager.MainMenu.Display(dbContext);
     }
 }

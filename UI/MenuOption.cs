@@ -12,7 +12,7 @@ public class MenuOption(string label, Func<IsabelliDocesContext, string, Task> a
 
     public bool HavePermission(IsabelliDocesContext dbContext)
     {
-        var user = MenuManager.LoginMenu.GetUser() ??
+        var user = LoginManager.GetUser() ??
             throw new Exception("Attempting to access menus without being logged in.");
 
         var existingClient = dbContext.Clients.Find(user.Id) ??
