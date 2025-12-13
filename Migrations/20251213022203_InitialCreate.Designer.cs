@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IsabelliDoces.Migrations
 {
     [DbContext(typeof(IsabelliDocesContext))]
-    [Migration("20251213011412_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20251213022203_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -416,6 +416,11 @@ namespace IsabelliDoces.Migrations
                         {
                             ClientId = 2,
                             AddressId = 3
+                        },
+                        new
+                        {
+                            ClientId = 3,
+                            AddressId = 4
                         });
                 });
 
@@ -474,6 +479,16 @@ namespace IsabelliDoces.Migrations
                         },
                         new
                         {
+                            RoleId = 2,
+                            PermissionType = 0
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            PermissionType = 1
+                        },
+                        new
+                        {
                             RoleId = 3,
                             PermissionType = 5
                         },
@@ -499,12 +514,7 @@ namespace IsabelliDoces.Migrations
                         },
                         new
                         {
-                            RoleId = 2,
-                            PermissionType = 0
-                        },
-                        new
-                        {
-                            RoleId = 2,
+                            RoleId = 3,
                             PermissionType = 1
                         },
                         new

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace IsabelliDoces.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -290,6 +290,7 @@ namespace IsabelliDoces.Migrations
                     { 7, 1 },
                     { 0, 2 },
                     { 1, 2 },
+                    { 1, 3 },
                     { 2, 3 },
                     { 3, 3 },
                     { 4, 3 },
@@ -308,7 +309,8 @@ namespace IsabelliDoces.Migrations
                     { 1, 1 },
                     { 2, 1 },
                     { 1, 2 },
-                    { 3, 2 }
+                    { 3, 2 },
+                    { 4, 3 }
                 });
 
             migrationBuilder.InsertData(

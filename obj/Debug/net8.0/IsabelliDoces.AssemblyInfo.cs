@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IsabelliDoces")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+84ce66479bc9bb9db63f4f84cc56b30ac57749ed")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6e89c3ea9bc38055c65153993315fa98eebf4047")]
 [assembly: System.Reflection.AssemblyProductAttribute("IsabelliDoces")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IsabelliDoces")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
