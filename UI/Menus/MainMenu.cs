@@ -1,4 +1,5 @@
 using IsabelliDoces.Data;
+using IsabelliDoces.Enums;
 
 namespace IsabelliDoces.UI.Menus;
 
@@ -11,8 +12,11 @@ public class MainMenu() : Menu
         (dbContext, label) => LoginManager.Login(dbContext);
 
     protected override MenuOption[] AllOptions => [
-        new("Funcionários", (context, label) => MenuManager.EmployeeMenu.Display(context) ),
-        new("Pedidos", (context, label) => MenuManager.OrderMenu.Display(context) ),
+        new("Funcionários", (context, label) =>
+            MenuManager.EmployeeMenu.Display(context),
+            PermissionType.CRUD_EMPLOYEE),
+        new("Pedidos", (context, label) => MenuManager.OrderMenu.Display(context),
+            PermissionType.MENU_ORDER),
         new("Encerrar Programa", (context, label) =>
         {
             Environment.Exit(0);

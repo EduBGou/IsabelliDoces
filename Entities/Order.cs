@@ -26,9 +26,20 @@ public class Order() : Entity
 
     public async Task<List<OrderLine>> ListingLinesAsync(IsabelliDocesContext dbContext, bool print = true)
     {
-        Console.WriteLine($"\nEstas são as linhas do pedido:");
-        return await MenuExtention.ListingAsync<OrderLine>(dbContext, print, q => q
+        if (print) Console.WriteLine($"\nEstas são as linhas do pedido:");
+        return await ListingHelper.ListingAsync<OrderLine>(dbContext, print, q => q
             .Include(ol => ol.Order).Include(ol => ol.CakeFlavor)
             .Where(ol => ol.Order!.Id == Id));
+    }
+
+    public async Task<decimal> GetPrice(IsabelliDocesContext dbContext)
+    {
+        decimal sum = 0;
+        var orderLines = await ListingLinesAsync(dbContext, false);
+        foreach (var ol in orderLines)
+        {
+            sum += ol.CakeFlavor!.Price * ol.Amount;
+        }
+        return sum;
     }
 }

@@ -287,14 +287,17 @@ namespace IsabelliDoces.Migrations
                     { 4, 1 },
                     { 5, 1 },
                     { 6, 1 },
+                    { 7, 1 },
                     { 0, 2 },
                     { 1, 2 },
                     { 2, 3 },
                     { 3, 3 },
                     { 4, 3 },
                     { 5, 3 },
+                    { 7, 3 },
                     { 2, 4 },
-                    { 6, 4 }
+                    { 6, 4 },
+                    { 7, 4 }
                 });
 
             migrationBuilder.InsertData(

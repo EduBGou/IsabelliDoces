@@ -10,14 +10,15 @@ public class EmployeeMenu() : Menu
     protected override string MenuTitle => "FUNCIONÁRIO";
 
     protected override MenuOption[] AllOptions => [
-        new("Listar/Alterar Funcionários", ListEmployee, PermissionType.CRUD_EMPLOYEE),
+        new("Listar Funcionários", ListEmployee, PermissionType.CRUD_EMPLOYEE),
     ];
 
     private async Task ListEmployee(IsabelliDocesContext dbContext, string label)
     {
         Console.Clear();
         Console.WriteLine($"=== {label.ToUpper()} ===");
-        await MenuExtention.ListingAsync<Employee>(dbContext);
+        var employees = await ListingHelper.ListingAsync<Employee>(dbContext);
+        if (employees.Count == 0) Console.WriteLine("Nâo há funcionários registrados!");
         Console.WriteLine("\nPressione qualquer tecla pra voltar.");
         Console.ReadKey();
     }

@@ -1,3 +1,4 @@
+using System.Globalization;
 using IsabelliDoces.Data;
 using IsabelliDoces.Entities;
 using IsabelliDoces.Enums;
@@ -29,7 +30,8 @@ public class OrderMenu() : Menu
     {
         Console.Clear();
         Console.WriteLine($"=== {label.ToUpper()}===");
-        await MenuExtention.ListingAsync<Order>(dbContext);
+        var orders = await ListingHelper.ListingAsync<Order>(dbContext);
+        if (orders.Count == 0) Console.WriteLine("Nâo há pedidos registrados!");
         Console.WriteLine("\nPressione qualquer tecla pra voltar.");
         Console.ReadKey();
     }
@@ -65,6 +67,9 @@ public class OrderMenu() : Menu
         dbContext.OrderLines.AddRange(orderLines);
         await dbContext.SaveChangesAsync();
 
+        var price = await newOrder.GetPrice(dbContext);
+        Console.WriteLine($"\nPreço Final: {price.ToString("C", new CultureInfo("pt-BR"))}");
+
         Console.WriteLine("\nPedido registrado com sucesso. Pressione qualquer tecla pra voltar.");
         Console.ReadKey();
     }
@@ -84,14 +89,14 @@ public class OrderMenu() : Menu
         var deliveryDate = orderFound.DeliveryDate;
 
         Console.WriteLine($"\nEndereço de Entrega atual: {deliveryAddress}");
-        if (MenuExtention.Continue("alterá-lo"))
+        if (ListingHelper.Continue("alterá-lo"))
         {
             deliveryAddress = await CollectDeliveryAddress(dbContext, clientFound);
             if (deliveryAddress is null) return;
         }
 
         Console.WriteLine($"\nData de Entrega atual: {deliveryDate}");
-        if (MenuExtention.Continue("alterá-la"))
+        if (ListingHelper.Continue("alterá-la"))
         {
             deliveryDate = CollectDeliveryDate();
             if (deliveryDate == DateTime.MinValue) return;
@@ -107,12 +112,11 @@ public class OrderMenu() : Menu
         };
 
         Console.WriteLine("\nAtuais linhas do pedido:");
-        var orderLines = await orderFound.ListingLinesAsync(dbContext);
+        await orderFound.ListingLinesAsync(dbContext);
 
-
-        if (MenuExtention.Continue("alterá-las"))
+        if (ListingHelper.Continue("alterá-las"))
         {
-            orderLines = await CollectOrderLines(dbContext);
+            var orderLines = await CollectOrderLines(dbContext);
             if (orderLines is null) return;
             foreach (var line in orderLines) line.Order = newOrder;
             dbContext.OrderLines.AddRange(orderLines);
@@ -122,10 +126,12 @@ public class OrderMenu() : Menu
         dbContext.Orders.Add(newOrder);
         await dbContext.SaveChangesAsync();
 
+        var price = await newOrder.GetPrice(dbContext);
+        Console.WriteLine($"\nPreço Final:  {price:C}");
+
         Console.WriteLine("\nPedido alterado com sucesso. Pressione qualquer tecla para voltar.");
         Console.ReadKey();
     }
-
 
     private static async Task ChangeOrderStatusAsync(IsabelliDocesContext dbContext, OrderStatus orderStatus, string label)
     {
@@ -140,7 +146,7 @@ public class OrderMenu() : Menu
 
         await orderToConfirm.ListingLinesAsync(dbContext);
 
-        if (!MenuExtention.Continue($"{label.ToLower()} do Pedido", "pressione ENTER para abortar")) return;
+        if (!ListingHelper.Continue($"{label.ToLower()} do Pedido", "pressione ENTER para abortar")) return;
 
         orderToConfirm.Status = orderStatus;
         await dbContext.SaveChangesAsync();
@@ -156,7 +162,7 @@ public class OrderMenu() : Menu
         if (clientsFound is null) return null;
 
         Console.WriteLine("\nSelecione o Cliente:");
-        MenuExtention.PrintList(clientsFound);
+        ListingHelper.PrintList(clientsFound);
 
         var clientFound = SearchHelper.SearchInListById(clientsFound);
         return clientFound;
@@ -181,7 +187,7 @@ public class OrderMenu() : Menu
 
         while (true)
         {
-            MenuExtention.PrintList(availableFlavors);
+            ListingHelper.PrintList(availableFlavors);
             Console.WriteLine("\nSelecione o ID do Sabor (ou 0 para finalizar os itens):");
             var flavorId = InputHelper.GetInputInt();
 
@@ -191,7 +197,7 @@ public class OrderMenu() : Menu
 
             if (flavor is null)
             {
-                Console.WriteLine("Id do sabor inválido. Tente novamente.");
+                Console.WriteLine("\nId do sabor inválido. Tente novamente.");
                 continue;
             }
 
@@ -214,9 +220,15 @@ public class OrderMenu() : Menu
         Console.WriteLine("\nSelecione o Endereço de Entrega (ID)");
         var deliveryAddresses = await clientFound.ListingDeliveryPlacesAddresses(dbContext, false);
 
-        MenuExtention.PrintList(deliveryAddresses);
+        ListingHelper.PrintList(deliveryAddresses);
 
-        if (deliveryAddresses.Count == 0) return null;
+        if (deliveryAddresses.Count == 0)
+        {
+            Console.WriteLine("Este Cliente não possui Endereços de Entrega registrados.");
+            Console.WriteLine("\nPressione qualquer tecla para voltar ao menu principal.");
+            Console.ReadKey();
+            return null;
+        }
 
         var deliveryAddress = SearchHelper.SearchInListById(deliveryAddresses);
         return deliveryAddress;

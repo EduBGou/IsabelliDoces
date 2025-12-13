@@ -1,9 +1,7 @@
-﻿using System.Globalization;
-using IsabelliDoces.Entities;
+﻿using IsabelliDoces.Entities;
 using IsabelliDoces.Enums;
 using IsabelliDoces.Relations;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 
 namespace IsabelliDoces.Data;
 
@@ -77,7 +75,8 @@ public class IsabelliDocesContext(DbContextOptions<IsabelliDocesContext> options
             new { ClientId = 1, AddressId = 1 },
             new { ClientId = 1, AddressId = 2 },
             new { ClientId = 2, AddressId = 1 },
-            new { ClientId = 2, AddressId = 3 }
+            new { ClientId = 2, AddressId = 3 },
+            new { ClientId = 3, AddressId = 4 }
         );
 
 
@@ -134,16 +133,19 @@ public class IsabelliDocesContext(DbContextOptions<IsabelliDocesContext> options
             new { RoleId = 1, PermissionType = PermissionType.CONFIRM_ORDER },
             new { RoleId = 1, PermissionType = PermissionType.LIST_ORDERS },
             new { RoleId = 1, PermissionType = PermissionType.CANCEL_ORDER },
+            new { RoleId = 1, PermissionType = PermissionType.MENU_ORDER },
 
             new { RoleId = 3, PermissionType = PermissionType.CREATE_ORDER },
             new { RoleId = 3, PermissionType = PermissionType.UPDATE_ORDER },
             new { RoleId = 3, PermissionType = PermissionType.LIST_ORDERS },
             new { RoleId = 3, PermissionType = PermissionType.CANCEL_ORDER },
+            new { RoleId = 3, PermissionType = PermissionType.MENU_ORDER },
 
             new { RoleId = 2, PermissionType = PermissionType.CRUD_EMPLOYEE },
             new { RoleId = 2, PermissionType = PermissionType.CRUD_CLIENT },
 
             new { RoleId = 4, PermissionType = PermissionType.LIST_ORDERS },
+            new { RoleId = 4, PermissionType = PermissionType.MENU_ORDER },
             new { RoleId = 4, PermissionType = PermissionType.CONFIRM_ORDER }
         );
 

@@ -1,12 +1,11 @@
-using System.Linq.Expressions;
+using System.Globalization;
 using IsabelliDoces.Data;
-using IsabelliDoces.Entities;
 using IsabelliDoces.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace IsabelliDoces.UI.Helpers;
 
-public static class MenuExtention
+public static class ListingHelper
 {
     const int LINE_LENGTH = 60;
     public static void PrintList<T>(List<T> entities)
@@ -37,7 +36,7 @@ public static class MenuExtention
                         valueStr = date.ToString("dd/MM/yyyy");
 
                     else if (value is decimal price)
-                        valueStr = $"R$ {price:C}";
+                        valueStr = price.ToString("C", new CultureInfo("pt-BR"));
 
                     else
                         valueStr = value.ToString()!;
@@ -58,16 +57,19 @@ public static class MenuExtention
         Func<IQueryable<T>, IQueryable<T>>? query = null
     ) where T : class
     {
-        Console.Clear();
-        Console.WriteLine($"Estes são todos os registros de <{typeof(T).Name}>:");
         IQueryable<T> dbSet = dbContext.Set<T>();
 
-        if (query is not null)
-        {
-            dbSet = query(dbSet);
-        }
+        if (query is not null) dbSet = query(dbSet);
+
         var list = await dbSet.ToListAsync();
-        if (print) PrintList(list);
+
+        if (print)
+        {
+            Console.Clear();
+            Console.WriteLine($"Estes são todos os registros de <{typeof(T).Name}>:");
+            PrintList(list);
+        }
+
         return list;
     }
 
