@@ -56,7 +56,8 @@ public class OrderMenu() : Menu
             AccomplishDate = DateTime.Today,
             DeliveryDate = deliveryDate,
             DeliveryAddress = deliveryAddress,
-            Status = OrderStatus.ACTIVE
+            Status = OrderStatus.ACTIVE,
+            Employee = LoginManager.GetUser()
         };
 
         var orderLines = await CollectOrderLines(dbContext);
@@ -87,6 +88,7 @@ public class OrderMenu() : Menu
 
         var deliveryAddress = orderFound.DeliveryAddress;
         var deliveryDate = orderFound.DeliveryDate;
+        var price = await orderFound.GetPrice(dbContext);
 
         Console.WriteLine($"\nEndereço de Entrega atual: {deliveryAddress}");
         if (ListingHelper.Continue("alterá-lo"))
@@ -108,7 +110,8 @@ public class OrderMenu() : Menu
             AccomplishDate = DateTime.Today,
             DeliveryDate = deliveryDate,
             DeliveryAddress = deliveryAddress,
-            Status = OrderStatus.ACTIVE
+            Status = OrderStatus.ACTIVE,
+            Employee = LoginManager.GetUser()
         };
 
         Console.WriteLine("\nAtuais linhas do pedido:");
@@ -120,13 +123,13 @@ public class OrderMenu() : Menu
             if (orderLines is null) return;
             foreach (var line in orderLines) line.Order = newOrder;
             dbContext.OrderLines.AddRange(orderLines);
+            price = await newOrder.GetPrice(dbContext);
         }
 
         orderFound.Status = OrderStatus.CANCELED;
         dbContext.Orders.Add(newOrder);
         await dbContext.SaveChangesAsync();
 
-        var price = await newOrder.GetPrice(dbContext);
         Console.WriteLine($"\nPreço Final:  {price:C}");
 
         Console.WriteLine("\nPedido alterado com sucesso. Pressione qualquer tecla para voltar.");
@@ -218,9 +221,9 @@ public class OrderMenu() : Menu
     private static async Task<Address?> CollectDeliveryAddress(IsabelliDocesContext dbContext, Client clientFound)
     {
         Console.WriteLine("\nSelecione o Endereço de Entrega (ID)");
-        var deliveryAddresses = await clientFound.ListingDeliveryPlacesAddresses(dbContext, false);
+        var deliveryAddresses = await clientFound.ListingDeliveryPlacesAddresses(dbContext);
 
-        ListingHelper.PrintList(deliveryAddresses);
+        // ListingHelper.PrintList(deliveryAddresses);
 
         if (deliveryAddresses.Count == 0)
         {

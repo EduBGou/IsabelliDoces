@@ -151,7 +151,8 @@ namespace IsabelliDoces.Migrations
                     AccomplishDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DeliveryDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DeliveryAddressId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false)
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    EmployeeId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -166,6 +167,12 @@ namespace IsabelliDoces.Migrations
                         name: "FK_Orders_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -360,6 +367,11 @@ namespace IsabelliDoces.Migrations
                 column: "DeliveryAddressId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_EmployeeId",
+                table: "Orders",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RoleContracts_EmployeeId",
                 table: "RoleContracts",
                 column: "EmployeeId");
@@ -392,13 +404,13 @@ namespace IsabelliDoces.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Employees");
-
-            migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Clients");
+
+            migrationBuilder.DropTable(
+                name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "Addresses");

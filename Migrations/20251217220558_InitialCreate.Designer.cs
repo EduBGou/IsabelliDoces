@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IsabelliDoces.Migrations
 {
     [DbContext(typeof(IsabelliDocesContext))]
-    [Migration("20251213022203_InitialCreate")]
+    [Migration("20251217220558_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -252,6 +252,9 @@ namespace IsabelliDoces.Migrations
                     b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
@@ -260,6 +263,8 @@ namespace IsabelliDoces.Migrations
                     b.HasIndex("ClientId");
 
                     b.HasIndex("DeliveryAddressId");
+
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Orders");
                 });
@@ -566,9 +571,17 @@ namespace IsabelliDoces.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("IsabelliDoces.Entities.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Client");
 
                     b.Navigation("DeliveryAddress");
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("IsabelliDoces.Entities.OrderLine", b =>

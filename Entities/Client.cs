@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IsabelliDoces.Entities;
 
-public class Client() : Entity, INameable
+public class Client() : Entity, INameable   
 {
     [AttributePresentation(Label = "Nome", ListingOrder = 2)]
     public string Name { get; set; } = string.Empty;

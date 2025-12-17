@@ -18,10 +18,13 @@ public class Order() : Entity
     public DateTime DeliveryDate { get; set; }
 
     [AttributePresentation(Label = "Local de Entrega")]
-    public Address DeliveryAddress { get; set; } = null!;
+    public required Address DeliveryAddress { get; set; }
 
     [AttributePresentation(Label = "Status do Pedido", ListingOrder = 5)]
     public OrderStatus Status { get; set; } = OrderStatus.ACTIVE;
+
+    [AttributePresentation(Label = "Atendente", ListingOrder = 6)]
+    public required Employee Employee { get; set; }
 
 
     public async Task<List<OrderLine>> ListingLinesAsync(IsabelliDocesContext dbContext, bool print = true)
