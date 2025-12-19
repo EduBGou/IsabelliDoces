@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Threading.Tasks;
-using IsabelliDoces.Data;
+﻿using IsabelliDoces.Data;
 using IsabelliDoces.Enums;
 using IsabelliDoces.Interfaces;
 using IsabelliDoces.Relations;

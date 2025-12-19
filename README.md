@@ -6,18 +6,10 @@ Um **Programa de Console** desenvolvido como trabalho final para a disciplina de
 
 ## Tecnologias e Ambiente de Desenvolvimento
 
-* **Framework:** .NET 8
-* **Linguagem:** C#
-* **Ambiente de Desenvolvimento (IDE/Editor):** Visual Studio Code
+* **Plataforma de Desenvolvimento:** .NET 8 SDK
+* **IDE/Editor:** Visual Studio Code
 
-### Extensões Essenciais do VS Code
-
-Para garantir o funcionamento e facilitar o desenvolvimento, as seguintes extensões são recomendadas:
-
-* **C#**
-* **C# Dev Kit**
-* **.NET Install Tool**
-* **SQLite 3 Editor** (Útil para vizualizr ou editar manualmente os valores dentro do banco de dados)
+Para iniciar o programa, basta ter o **.NET 8 SDK** instalado (disponível no site oficial da Microsoft) e executar o comando `dotnet run` no terminal. Se for utilizar o VS Code, recomenda-se baixar a extensão **SQLite 3 Editor** para vizualizar ou editar manualmente as tabelas do banco de dados.
 
 ---
 
@@ -26,10 +18,9 @@ Para garantir o funcionamento e facilitar o desenvolvimento, as seguintes extens
 As seguintes funcionalidades principais estão disponíveis no sistema:
 
 1.  **Cadastrar Pedido**
-2.  **Listar Pedido**
-3.  **Alterar Pedido**
-4.  **Cancelar Pedido**
-5.  **Confirmar Entrega de Pedido**
+2.  **Alterar Pedido**
+3.  **Cancelar Pedido**
+4.  **Confirmar Entrega de Pedido**
 
 ---
 
